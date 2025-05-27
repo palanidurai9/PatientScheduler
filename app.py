@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, session # Added flash and session
 import sqlite3
 import datetime
+import os
 
 # New Imports for Authentication
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_super_secret_key_here' # IMPORTANT: Change this to a strong, random key!
+# Try to get SECRET_KEY from environment variable, otherwise use a fallback for local development
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_fallback_secret_key')
 DATABASE = 'database.db'
 
 login_manager = LoginManager()
