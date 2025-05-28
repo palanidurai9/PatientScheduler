@@ -12,6 +12,7 @@
     --border-color: #E2E8F0;
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -21,13 +22,20 @@ body {
     background-color: var(--background-color);
     color: var(--text-primary);
     line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Adding a subtle medical background element to the body for login/home */
+body.medical-background {
+    background-image: linear-gradient(to bottom, var(--background-color), rgba(43, 108, 176, 0.05));
+    background-attachment: fixed;
 }
 
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 1rem;
     background-color: var(--card-background);
-    padding: 2.5rem;
+    padding: 1.5rem;
     border-radius: 1rem;
     box-shadow: var(--shadow-md);
 }
@@ -38,15 +46,16 @@ h1, h2 {
     margin-bottom: 1.5rem;
     font-weight: 600;
     letter-spacing: -0.025em;
+    font-size: 1.75rem;
 }
 
 h1 {
-    font-size: 2.25rem;
     margin-bottom: 2rem;
+    font-size: 2rem;
 }
 
 h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: var(--secondary-color);
 }
 
@@ -56,7 +65,7 @@ form {
     max-width: 600px;
     margin: 0 auto;
     background: var(--card-background);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 0.75rem;
     box-shadow: var(--shadow-sm);
 }
@@ -94,7 +103,7 @@ form button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -117,6 +126,51 @@ form button:active {
     transform: translateY(0);
 }
 
+/* Loading States */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.75rem 0 0 -0.75rem;
+    border: 2px solid var(--primary-color);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Form Validation */
+input:invalid {
+    border-color: var(--danger-color);
+}
+
+input:invalid:focus {
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+input:invalid + .error-message {
+    display: block;
+}
+
 table {
     width: 100%;
     border-collapse: separate;
@@ -129,7 +183,7 @@ table {
 }
 
 table th, table td {
-    padding: 1.25rem 1rem;
+    padding: 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
@@ -154,37 +208,41 @@ table tr:hover td {
 .status-booked {
     color: var(--primary-color);
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 9999px;
     background-color: rgba(43, 108, 176, 0.1);
     display: inline-block;
+    font-size: 0.875rem;
 }
 
 .status-confirmed {
     color: var(--success-color);
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 9999px;
     background-color: rgba(56, 161, 105, 0.1);
     display: inline-block;
+     font-size: 0.875rem;
 }
 
 .status-cancelled {
     color: var(--danger-color);
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 9999px;
     background-color: rgba(229, 62, 62, 0.1);
     display: inline-block;
+     font-size: 0.875rem;
 }
 
 .status-no-show {
     color: var(--warning-color);
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 9999px;
     background-color: rgba(221, 107, 32, 0.1);
     display: inline-block;
+     font-size: 0.875rem;
 }
 
 .flashes {
@@ -220,71 +278,49 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Medical-specific styles */
-.medical-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid var(--border-color);
-}
-
-.medical-header h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.medical-header p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-}
-
-.appointment-card {
+/* Login Page Specific Styles */
+.login-container {
+    max-width: 400px;
+    margin: 3rem auto;
     background: var(--card-background);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.appointment-card:hover {
-    transform: translateY(-2px);
+    padding: 2rem;
+    border-radius: 1rem;
     box-shadow: var(--shadow-md);
+    text-align: center;
 }
 
-.appointment-time {
-    font-size: 1.25rem;
-    font-weight: 600;
+.login-container h1 {
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
 }
 
-.appointment-details {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+.login-container form {
+    padding: 0;
+    box-shadow: none;
+    background: none;
+    gap: 1rem;
 }
 
-@media (max-width: 768px) {
-    .container {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
+.login-container .flashes li {
+    background-color: var(--danger-color);
+    margin-bottom: 1rem;
+    justify-content: center;
+}
 
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    margin-bottom: 1rem;
+}
 
-    form {
-        padding: 1.5rem;
-    }
+.login-container button {
+    margin-top: 0;
+    padding: 0.875rem 1.5rem;
+}
 
-    .medical-header h1 {
-        font-size: 2rem;
-    }
+.login-container p {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
 }
 
 /* Medical Icons and Components */
@@ -292,26 +328,27 @@ a:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
     border-radius: 50%;
     background-color: rgba(43, 108, 176, 0.1);
     color: var(--primary-color);
-    margin-right: 0.75rem;
+    margin-right: 0.5rem;
+    font-size: 1rem;
 }
 
 .medical-section {
     background: var(--card-background);
     border-radius: 0.75rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border: 1px solid var(--border-color);
 }
 
 .medical-section h3 {
     color: var(--primary-color);
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
 }
@@ -320,16 +357,17 @@ a:hover {
 .booking-steps {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     position: relative;
+    padding: 0 1rem;
 }
 
 .booking-steps::before {
     content: '';
     position: absolute;
-    top: 1.5rem;
-    left: 0;
-    right: 0;
+    top: 1.25rem;
+    left: 1rem;
+    right: 1rem;
     height: 2px;
     background: var(--border-color);
     z-index: 1;
@@ -339,21 +377,22 @@ a:hover {
     position: relative;
     z-index: 2;
     background: var(--card-background);
-    padding: 0 1rem;
+    padding: 0 0.5rem;
     text-align: center;
 }
 
 .step-number {
-    width: 3rem;
-    height: 3rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
     background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 0.75rem;
+    margin: 0 auto 0.5rem;
     font-weight: 600;
+    font-size: 1.1rem;
 }
 
 .step.active .step-number {
@@ -362,7 +401,7 @@ a:hover {
 
 .step-label {
     color: var(--text-secondary);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
 }
 
 .step.active .step-label {
@@ -374,66 +413,67 @@ a:hover {
 .patient-card {
     background: var(--card-background);
     border-radius: 0.75rem;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
     border: 1px solid var(--border-color);
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 1.5rem;
-    align-items: start;
+    gap: 1rem;
+    align-items: center;
 }
 
 .patient-avatar {
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
     background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 600;
 }
 
 .patient-info {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .patient-name {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
 }
 
 .patient-details {
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
 }
 
 /* Medical Form Enhancements */
 .medical-form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .medical-form-group label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .medical-form-group label::before {
     content: '•';
     color: var(--primary-color);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     line-height: 1;
 }
 
 .medical-input-group {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1rem;
 }
 
@@ -441,17 +481,17 @@ a:hover {
 .medical-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem;
     border-radius: 9999px;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 }
 
 .medical-badge::before {
     content: '';
-    width: 0.5rem;
-    height: 0.5rem;
+    width: 0.4rem;
+    height: 0.4rem;
     border-radius: 50%;
     background: currentColor;
 }
@@ -475,21 +515,26 @@ a:hover {
 .medical-calendar {
     background: var(--card-background);
     border-radius: 0.75rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.calendar-header h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .calendar-day {
@@ -497,9 +542,10 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    font-size: 0.875rem;
 }
 
 .calendar-day:hover {
@@ -520,18 +566,19 @@ a:hover {
 /* Medical Notifications */
 .medical-notification {
     position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
+    bottom: 1rem;
+    right: 1rem;
     background: var(--card-background);
     border-radius: 0.75rem;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
     box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     border-left: 4px solid var(--primary-color);
     animation: slideIn 0.3s ease-out;
     z-index: 1000;
+    font-size: 0.9rem;
 }
 
 .medical-notification.success {
@@ -551,80 +598,519 @@ a:hover {
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* Responsive Improvements */
-@media (max-width: 768px) {
-    .booking-steps {
-        flex-direction: column;
+/* --- Responsive Styles --- */
+
+/* Small devices (phones, 640px and up) */
+@media (min-width: 640px) {
+    .container {
+        margin: 1.5rem auto;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    form {
+        padding: 2rem;
+        gap: 1.25rem;
+    }
+
+    form input[type="text"],
+    form input[type="tel"],
+    form input[type="email"],
+    form input[type="datetime-local"],
+    form select {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    form button {
+        padding: 1rem 2rem;
+    }
+
+    table th, table td {
+        padding: 1.2rem;
+    }
+
+    .login-container {
+        margin: 4rem auto;
+        padding: 2.5rem;
+    }
+
+     .login-container h1 {
+        font-size: 2.25rem;
+    }
+
+    .login-container form {
         gap: 1.5rem;
     }
 
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+        margin-bottom: 1.5rem;
+    }
+
+    .login-container button {
+         padding: 1rem 2rem;
+    }
+
+    .medical-section {
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .medical-section h3 {
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .booking-steps {
+         margin-bottom: 2rem;
+         padding: 0 2rem;
+    }
+
     .booking-steps::before {
-        display: none;
+         top: 1.5rem;
+         left: 2rem;
+         right: 2rem;
+    }
+
+     .step {
+         padding: 0 1rem;
+     }
+
+    .step-number {
+         width: 3rem;
+         height: 3rem;
+         margin: 0 auto 0.75rem;
+         font-size: 1.2rem;
+    }
+
+    .step-label {
+         font-size: 0.875rem;
     }
 
     .patient-card {
-        grid-template-columns: 1fr;
-        text-align: center;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        gap: 1.5rem;
+        grid-template-columns: auto 1fr;
+        align-items: start;
     }
 
-    .patient-avatar {
-        margin: 0 auto;
+     .patient-avatar {
+         width: 4rem;
+         height: 4rem;
+         font-size: 1.5rem;
+     }
+
+     .patient-info {
+        gap: 0.5rem;
+     }
+
+     .patient-name {
+         font-size: 1.25rem;
+     }
+
+     .patient-details {
+         font-size: 0.95rem;
+     }
+
+    .medical-form-group {
+        margin-bottom: 1.5rem;
     }
+
+    .medical-form-group label {
+        margin-bottom: 0.75rem;
+         font-size: 0.95rem;
+    }
+
+     .medical-form-group label::before {
+         font-size: 1.5rem;
+     }
 
     .medical-input-group {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .medical-badge {
+        padding: 0.5rem 1rem;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+     .medical-badge::before {
+         width: 0.5rem;
+         height: 0.5rem;
+     }
+
+    .medical-calendar {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .calendar-header {
+        margin-bottom: 1.5rem;
+    }
+
+     .calendar-header h4 {
+        font-size: 1.1rem;
     }
 
     .calendar-grid {
-        gap: 0.25rem;
+        gap: 0.5rem;
+    }
+
+    .calendar-day {
+         border-radius: 0.5rem;
+         font-size: 0.9rem;
+    }
+
+    .medical-notification {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        padding: 1rem 1.5rem;
+        gap: 1rem;
+        font-size: 1rem;
     }
 }
 
-/* Login Page Specific Styles */
-.login-container {
-    max-width: 400px;
-    margin: 4rem auto;
-    background: var(--card-background);
-    padding: 2.5rem;
-    border-radius: 1rem;
-    box-shadow: var(--shadow-md);
-    text-align: center;
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .container {
+        margin: 2rem auto;
+        padding: 3rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+     h2 {
+        font-size: 2rem;
+    }
+
+    form {
+        padding: 3rem;
+        gap: 1.5rem;
+    }
+
+     form input[type="text"],
+    form input[type="tel"],
+    form input[type="email"],
+    form input[type="datetime-local"],
+    form select {
+        padding: 1rem 1.25rem;
+        font-size: 1.05rem;
+    }
+
+    form button {
+        padding: 1.125rem 2.5rem;
+        font-size: 1.1rem;
+    }
+
+     table th, table td {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .login-container {
+        margin: 5rem auto;
+        padding: 3rem;
+    }
+
+    .login-container h1 {
+        font-size: 2.5rem;
+    }
+
+    .medical-section {
+        padding: 2.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .medical-section h3 {
+         font-size: 1.3rem;
+         margin-bottom: 1.5rem;
+    }
+
+    .booking-steps {
+        flex-direction: row;
+        gap: 2rem;
+         margin-bottom: 2.5rem;
+    }
+
+     .booking-steps::before {
+         display: block;
+         top: 1.5rem;
+     }
+
+    .step {
+         padding: 0 1.5rem;
+     }
+
+     .step-number {
+         width: 3.5rem;
+         height: 3.5rem;
+         margin: 0 auto 0.75rem;
+         font-size: 1.3rem;
+     }
+
+    .step-label {
+        font-size: 0.9rem;
+    }
+
+    .patient-card {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        gap: 2rem;
+    }
+
+     .patient-avatar {
+         width: 4.5rem;
+         height: 4.5rem;
+         font-size: 1.6rem;
+     }
+
+     .patient-name {
+         font-size: 1.3rem;
+     }
+
+     .patient-details {
+         font-size: 1rem;
+     }
+
+    .medical-form-group {
+        margin-bottom: 2rem;
+    }
+
+    .medical-form-group label {
+         font-size: 1rem;
+    }
+
+     .medical-form-group label::before {
+         font-size: 1.6rem;
+     }
+
+    .medical-input-group {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .medical-badge {
+        padding: 0.6rem 1.2rem;
+        gap: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+     .medical-badge::before {
+         width: 0.6rem;
+         height: 0.6rem;
+     }
+
+    .medical-calendar {
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .calendar-header {
+        margin-bottom: 2rem;
+    }
+
+     .calendar-header h4 {
+        font-size: 1.2rem;
+    }
+
+    .calendar-grid {
+        gap: 0.75rem;
+    }
+
+    .calendar-day {
+         font-size: 1rem;
+    }
+
+    .medical-notification {
+        bottom: 2rem;
+        right: 2rem;
+        padding: 1.25rem 1.75rem;
+        gap: 1.25rem;
+        font-size: 1.05rem;
+    }
 }
 
-.login-container h1 {
-    color: var(--primary-color);
-    margin-bottom: 2rem;
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+    .container {
+        margin: 3rem auto;
+        padding: 4rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+     h2 {
+        font-size: 2.25rem;
+    }
+
+    form {
+        padding: 4rem;
+        gap: 2rem;
+    }
+
+     form input[type="text"],
+    form input[type="tel"],
+    form input[type="email"],
+    form input[type="datetime-local"],
+    form select {
+        padding: 1.1rem 1.35rem;
+        font-size: 1.1rem;
+    }
+
+    form button {
+        padding: 1.25rem 3rem;
+        font-size: 1.15rem;
+    }
+
+     table th, table td {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .login-container {
+        margin: 6rem auto;
+        padding: 3.5rem;
+    }
+
+    .login-container h1 {
+        font-size: 3rem;
+    }
+
+    .medical-section {
+        padding: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .medical-section h3 {
+         font-size: 1.4rem;
+         margin-bottom: 1.75rem;
+    }
+
+    .booking-steps {
+        gap: 2.5rem;
+         margin-bottom: 3rem;
+    }
+
+     .booking-steps::before {
+         top: 1.75rem;
+     }
+
+    .step {
+         padding: 0 2rem;
+     }
+
+     .step-number {
+         width: 4rem;
+         height: 4rem;
+         margin: 0 auto 1rem;
+         font-size: 1.4rem;
+     }
+
+    .step-label {
+        font-size: 0.95rem;
+    }
+
+    .patient-card {
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+        gap: 2.5rem;
+    }
+
+     .patient-avatar {
+         width: 5rem;
+         height: 5rem;
+         font-size: 1.8rem;
+     }
+
+     .patient-name {
+         font-size: 1.4rem;
+     }
+
+     .patient-details {
+         font-size: 1.05rem;
+     }
+
+    .medical-form-group {
+        margin-bottom: 2.5rem;
+    }
+
+    .medical-form-group label {
+         font-size: 1.05rem;
+    }
+
+     .medical-form-group label::before {
+         font-size: 1.8rem;
+     }
+
+    .medical-input-group {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2.5rem;
+    }
+
+    .medical-badge {
+        padding: 0.7rem 1.4rem;
+        gap: 0.7rem;
+        font-size: 0.95rem;
+    }
+
+     .medical-badge::before {
+         width: 0.7rem;
+         height: 0.7rem;
+     }
+
+    .medical-calendar {
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .calendar-header {
+        margin-bottom: 2.5rem;
+    }
+
+     .calendar-header h4 {
+        font-size: 1.3rem;
+    }
+
+    .calendar-grid {
+        gap: 1rem;
+    }
+
+    .calendar-day {
+         font-size: 1.05rem;
+    }
+
+    .medical-notification {
+        bottom: 2.5rem;
+        right: 2.5rem;
+        padding: 1.5rem 2rem;
+        gap: 1.5rem;
+        font-size: 1.1rem;
+    }
 }
 
-.login-container form {
-    padding: 0;
-    box-shadow: none;
-    background: none;
+/* Extra large devices (large desktops, 1280px and up) */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1400px;
+    }
 }
 
-.login-container .flashes li {
-    background-color: var(--danger-color);
-    margin-bottom: 1.5rem;
-    justify-content: center;
-}
-
-.login-container input[type="text"],
-.login-container input[type="password"] {
-    margin-bottom: 1.5rem;
-}
-
-.login-container button {
-    margin-top: 0.5rem;
-}
-
-.login-container p {
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
-}
-
-/* Adding a subtle medical background element to the body for login/home */
-body.medical-background {
-    background-image: linear-gradient(to bottom, var(--background-color), rgba(43, 108, 176, 0.05));
-    min-height: 100vh;
-    background-attachment: fixed;
+/* 2XL devices (larger desktops, 1536px and up) */
+@media (min-width: 1536px) {
+    .container {
+        max-width: 1600px;
+    }
 }
